@@ -9,6 +9,9 @@ def calibrateAnalyticGaussianMechanism(epsilon, delta, GS, tol = 1.e-12):
     delta : target delta (0 < delta < 1)
     GS : upper bound on L2 global sensitivity (GS >= 0)
     tol : error tolerance for binary search (tol > 0)
+
+    Output:
+    sigma : standard deviation of Gaussian noise needed to achieve (epsilon,delta)-DP under global sensitivity GS
     """
 
     def Phi(t):
@@ -59,5 +62,7 @@ def calibrateAnalyticGaussianMechanism(epsilon, delta, GS, tol = 1.e-12):
         s_inf, s_sup = doubling_trick(predicate_stop_DT, 0.0, 1.0)
         s_final = binary_search(predicate_stop_BS, predicate_left_BS, s_inf, s_sup)
         alpha = function_s_to_alpha(s_final)
+        sigma = alpha*GS/sqrt(2.0*epsilon)
 
-    return alpha*GS/sqrt(2.0*epsilon)
+    return sigma
+
